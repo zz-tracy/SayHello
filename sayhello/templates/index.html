@@ -1,0 +1,39 @@
+<!--使用form_field()宏渲染表单,然后迭代传入的message变量,渲染消息列表-->
+<!--导入base.html文件-->
+{% extends 'base.html' %}
+<!--从内置的bootstrap/form.html模板导入render_form()宏渲染问候表单-->
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block content %}
+<!--使用render_form()宏自动创建一个<form>标签,在标签内依次渲染包括CSRF令牌在内的所有字段,并根据表单的验证状态来渲染表单状态和错误消息-->
+    <div class="hello-form">
+        {{ render_form(form, action=request.full_path) }}
+    </div>
+<!--对message变量进行宽度过滤-->
+    <h5>{{ messages|length }} messages
+        <small class="float-right">
+<!--            在url中添加URL片段#bottom,它指向页面底部的a元素,其id值为bottom-->
+            <a href="#bottom" title="Go Bottom">&darr;</a>
+        </small>
+    </h5>
+    <div class="list-group">
+<!--        遍历message变量-->
+        {% for message in messages %}
+            <a class="list-group-item list-group-item-action flex-column">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">{{ message.name }}
+<!--                        渲染loop.revindex变量,用来表示留言的反向序号标记.-->
+                        <small class="text-muted"> #{{ loop.revindex }}</small>
+                    </h5>
+                    <small data-toggle="tooltip" data-placement="top">
+<!--                 使用datetime.strftime()方法将时间戳输出格式定义为:'年/月/日 时:分'-->
+                           data-timestamp="{{ message.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ') }}"
+                           data-delay="500">
+                        {{ moment(message.timestamp).fromNow(refresh=True) }}
+                    </small>
+                </div>
+                <p class="mb-1">{{ message.body }}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
