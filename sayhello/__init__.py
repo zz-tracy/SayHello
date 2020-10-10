@@ -5,7 +5,6 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 
-
 # 创建程序实例app,传入__name__变量作为Flask类构造方法的import_name参数值,通过这个值来确认程序路径
 app = Flask('sayhello')
 # 使用config对象的from_pyfile()方法加载配置,同时传入配置模块的文件名作为参数
